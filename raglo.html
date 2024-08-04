@@ -1,28 +1,379 @@
-<html><head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Caja Sorpresa 3D - Gana Seguidores y Vistas</title>
-<link rel="stylesheet" href="estilos.css">
-<script defer src="main.js"></script>
+<html><head><base href="https://sobre-magico-premium.com/"><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Sobre Mágico Premium - Abre, Descubre y Comparte</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+  
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #6e48aa, #9d50bb, #f4d03f);
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #fff;
+    overflow: hidden;
+  }
+  .container {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+  }
+  h1 {
+    margin-bottom: 30px;
+    color: #f0f0f0;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    font-size: 2.5em;
+  }
+  .envelope-container {
+    width: 300px;
+    height: 200px;
+    margin: 0 auto 30px;
+    position: relative;
+    perspective: 1000px;
+    cursor: pointer;
+  }
+  .envelope {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.8s;
+  }
+  .envelope-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2em;
+    color: #333;
+    border: 2px solid #f4d03f;
+    box-sizing: border-box;
+    background: linear-gradient(45deg, #f4d03f, #f8e9a1);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  }
+  .envelope-front {
+    transform: rotateY(0deg);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .envelope-back {
+    transform: rotateY(180deg);
+    border-radius: 10px;
+  }
+  .envelope-flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #f4d03f, #f8e9a1);
+    clip-path: polygon(0% 50%, 50% 0%, 100% 50%, 100% 100%, 0% 100%);
+    transform-origin: top;
+    transition: transform 0.5s;
+    z-index: 2;
+  }
+  .envelope.open .envelope-flap {
+    transform: rotateX(180deg);
+  }
+  .envelope-content {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    background: white;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+    color: #333;
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+  .envelope.open .envelope-content {
+    opacity: 1;
+  }
+  .message {
+    margin-top: 20px;
+    font-size: 22px;
+    font-weight: 600;
+  }
+  .prize {
+    font-size: 32px;
+    margin-top: 30px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  }
+  .timer {
+    margin-top: 15px;
+    font-size: 18px;
+    color: #f0f0f0;
+  }
+  .btn {
+    background: linear-gradient(45deg, #FF512F, #DD2476);
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    margin-top: 25px;
+    border-radius: 30px;
+    font-size: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    opacity: 0;
+    box-shadow: 0 5px 15px rgba(221, 36, 118, 0.4);
+  }
+  .btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 20px rgba(221, 36, 118, 0.6);
+  }
+  .stars {
+    position: fixed;
+    width: 1px;
+    height: 1px;
+    background: transparent;
+    box-shadow: 1744px 122px #FFF , 134px 1321px #FFF , 92px 859px #FFF;
+    animation: animStar 50s linear infinite;
+  }
+  .stars:after {
+    content: " ";
+    position: absolute;
+    top: 2000px;
+    width: 1px;
+    height: 1px;
+    background: transparent;
+    box-shadow: 1744px 122px #FFF , 134px 1321px #FFF , 92px 859px #FFF;
+  }
+  @keyframes animStar {
+    from { transform: translateY(0px); }
+    to { transform: translateY(-2000px); }
+  }
+  
+  .sparkle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: #FFF;
+    border-radius: 50%;
+    opacity: 0;
+    animation: sparkle 2s ease-in-out infinite;
+  }
+  
+  @keyframes sparkle {
+    0%, 100% { opacity: 0; transform: scale(0); }
+    50% { opacity: 1; transform: scale(1); }
+  }
 
+  @keyframes confetti {
+    0% { transform: translateY(0) rotateZ(0); opacity: 1; }
+    100% { transform: translateY(1000px) rotateZ(720deg); opacity: 0; }
+  }
+  .confetti {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background: #f0f0f0;
+    opacity: 0;
+  }
+</style>
 </head>
 <body>
+  <div class="stars"></div>
   <div class="container">
-    <h1>¡Caja Sorpresa 3D!</h1>
-    <p>Gira la caja y descubre increíbles regalos para tus redes sociales. ¡Abre la caja y sorpréndete!</p>
-
-    <div class="gift-box" id="giftBox">
-      <div class="gift-box-face gift-box-front">¡Gírame!</div>
-      <div class="gift-box-face gift-box-back">¡Sorpresa!</div>
+    <h1>Sobre Mágico Premium</h1>
+    <div class="envelope-container">
+      <div class="envelope" id="envelope">
+        <div class="envelope-face envelope-front">
+          <div class="envelope-flap"></div>
+          <div class="envelope-content">Tu premio especial está aquí</div>
+        </div>
+        <div class="envelope-face envelope-back"></div>
+      </div>
     </div>
-
-    <div id="result"></div>
-    <button id="downloadBtn">Descargar Resultado</button>
+    <div class="message" id="message">Haz clic en el sobre para descubrir tu premio exclusivo</div>
+    <div class="prize" id="prize"></div>
+    <div class="timer" id="timer"></div>
+    <button class="btn" id="downloadBtn" style="display: none;">Descargar Certificado Especial</button>
   </div>
 
-  <div id="adminStatus">Modo Admin</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script>
+  $(document).ready(function() {
+    const prizes = [
+      "100 seguidores VIP para Instagram",
+      "50 me gustas premium para Instagram",
+      "10000 vistas garantizadas para video de TikTok",
+      "2000 vistas de alta calidad para reels de Instagram"
+    ];
+    
+    let canOpen = true;
+    let timeLeft = 0;
+    let isRevealing = false;
 
-  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    function getRandomPrize() {
+      return prizes[Math.floor(Math.random() * prizes.length)];
+    }
 
-</body>
-</html>
+    function updateTimer() {
+      if (timeLeft > 0) {
+        const days = Math.floor(timeLeft / (24 * 60 * 60));
+        const hours = Math.floor((timeLeft % (24 * 60 * 60)) / (60 * 60));
+        const minutes = Math.floor((timeLeft % (60 * 60)) / 60);
+        const seconds = timeLeft % 60;
+        $('#timer').text(`Próxima apertura en: ${days}d ${hours}h ${minutes}m ${seconds}s`);
+        timeLeft--;
+        setTimeout(updateTimer, 1000);
+      } else {
+        $('#timer').text('');
+        canOpen = true;
+      }
+    }
+
+    function setNextOpenTime() {
+      const nextOpenTime = Date.now() + 7 * 24 * 60 * 60 * 1000; // 7 days in milliseconds
+      localStorage.setItem('nextOpenTime', nextOpenTime);
+      timeLeft = Math.floor((nextOpenTime - Date.now()) / 1000);
+      updateTimer();
+    }
+
+    const storedNextOpenTime = localStorage.getItem('nextOpenTime');
+    if (storedNextOpenTime) {
+      const currentTime = Date.now();
+      if (currentTime < storedNextOpenTime) {
+        canOpen = false;
+        timeLeft = Math.floor((storedNextOpenTime - currentTime) / 1000);
+        updateTimer();
+      }
+    }
+
+    function createConfetti() {
+      for (let i = 0; i < 150; i++) {
+        const confetti = document.createElement('div');
+        confetti.classList.add('confetti');
+        confetti.style.left = Math.random() * window.innerWidth + 'px';
+        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+        confetti.style.animation = `confetti ${1 + Math.random() * 3}s linear forwards`;
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 3000);
+      }
+    }
+
+    function createSparkles() {
+      for (let i = 0; i < 30; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.classList.add('sparkle');
+        sparkle.style.left = Math.random() * window.innerWidth + 'px';
+        sparkle.style.top = Math.random() * window.innerHeight + 'px';
+        sparkle.style.animationDelay = Math.random() * 2 + 's';
+        document.body.appendChild(sparkle);
+        setTimeout(() => sparkle.remove(), 2000);
+      }
+    }
+
+    function revealPrize() {
+      if (isRevealing) return;
+      isRevealing = true;
+
+      const prize = getRandomPrize();
+      const prizeWords = prize.split(' ');
+      let currentText = '';
+      let wordIndex = 0;
+
+      function revealNextWord() {
+        if (wordIndex < prizeWords.length) {
+          currentText += prizeWords[wordIndex] + ' ';
+          $('#prize').text(currentText).css({opacity: 1, transform: 'translateY(0)'});
+          wordIndex++;
+          setTimeout(revealNextWord, 300);
+        } else {
+          isRevealing = false;
+          $('#message').text('¡Felicidades! Descarga tu certificado especial y compártelo.');
+          $('#downloadBtn').fadeIn();
+          setNextOpenTime();
+        }
+      }
+
+      revealNextWord();
+    }
+
+    $('#envelope').click(function() {
+      if (!canOpen) {
+        $('#message').text('Debes esperar antes de abrir otro sobre mágico');
+        return;
+      }
+
+      $(this).addClass('open');
+      setTimeout(() => {
+        createConfetti();
+        createSparkles();
+        revealPrize();
+      }, 500);
+
+      canOpen = false;
+    });
+
+    $('#downloadBtn').click(function() {
+      html2canvas(document.body).then(function(canvas) {
+        const img = canvas.toDataURL('image/png');
+        const link = document.createElement('a');
+        link.download = 'premio_sobre_magico_premium.png';
+        link.href = img;
+        link.click();
+        
+        // Aquí puedes agregar código para enviar la imagen a tu servidor o email
+        // Por ejemplo:
+        // $.post('https://tuservidor.com/guardar-imagen', {imagen: img});
+      });
+    });
+
+    // Efecto de estrellas en movimiento
+    const starCount = 300;
+    let starStyles = '';
+    for(let i = 0; i < starCount; i++) {
+      const x = Math.floor(Math.random() * window.innerWidth);
+      const y = Math.floor(Math.random() * window.innerHeight);
+      const duration = Math.random() * 30 + 10;
+      const size = Math.random() * 2;
+      starStyles += `${x}px ${y}px #FFF,`;
+    }
+    starStyles = starStyles.slice(0, -1);
+    $('.stars').css('box-shadow', starStyles);
+    
+    // Efecto de brillo en el sobre
+    setInterval(() => {
+      const envelope = document.getElementById('envelope');
+      envelope.style.boxShadow = '0 0 20px #f4d03f';
+      setTimeout(() => {
+        envelope.style.boxShadow = 'none';
+      }, 500);
+    }, 3000);
+    
+    // Movimiento suave del sobre
+    function moveEnvelope() {
+      const envelope = document.getElementById('envelope');
+      let rotationY = 0;
+      let translateY = 0;
+      
+      setInterval(() => {
+        rotationY = Math.sin(Date.now() / 1000) * 5;
+        translateY = Math.sin(Date.now() / 800) * 10;
+        envelope.style.transform = `rotateY(${rotationY}deg) translateY(${translateY}px)`;
+      }, 20);
+    }
+    
+    moveEnvelope();
+  });
+</script>
+</body></html>
